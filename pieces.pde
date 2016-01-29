@@ -8,6 +8,7 @@ class Piece {
   IntList possiblemoves = new IntList();
   int x;
   int y;
+  boolean dead=false;
 
   Piece(String teamm, String rankk, int idd, int poss, PImage picc) {
     team = teamm;
@@ -17,16 +18,20 @@ class Piece {
     pic=picc;
   }
   void draw() {
-    this.x=pos_tox(this.pos);
-    this.y=pos_toy(this.pos);
+    if (!dead) {
+      this.x=pos_tox(this.pos);
+      this.y=pos_toy(this.pos);
 
-    imageMode(CENTER);
-    if (!active) {
-      image(pic, (pos_tox(pos)*90)-45, (pos_toy(pos)*90)-45);
+      imageMode(CENTER);
+      if (!active) {
+        image(pic, (pos_tox(pos)*90)-45, (pos_toy(pos)*90)-45);
+      } else {
+        image(pic, mouseX, mouseY);
+      }
+      imageMode(CORNER);
     } else {
-      image(pic, mouseX, mouseY);
+      this.pos=999;
     }
-    imageMode(CORNER);
   }
 
   void findmoves() {
@@ -36,24 +41,59 @@ class Piece {
       if (this.team=="white") {
         if (this.y!=1) {
           boolean blocked=false;
-
+          boolean openingblocked=false;
           for (int i=0; i<pieces.size(); i++) {
             if (pieces.get(i).pos==xy_topos(this.x, this.y-1)) {
               blocked=true;
             }
-          }
-          if (!blocked) {
-            for (int i=0; i<pieces.size(); i++) {
-              if (pieces.get(i).pos==xy_topos(this.x+1, this.y-1) && this.x!=8 && pieces.get(i).team=="black") {
-                possiblemoves.append(xy_topos(this.x+1, this.y-1));
-              }
-              if (pieces.get(i).pos==xy_topos(this.x-1, this.y-1) && this.x!=1 && pieces.get(i).team=="black") {
-                possiblemoves.append(xy_topos(this.x-1, this.y-1));
-              }
+            if (pieces.get(i).pos==xy_topos(this.x, this.y-2) || this.y!=7) {
+              openingblocked=true;
             }
-            possiblemoves.append(xy_topos(this.x, this.y-1));
           }
-        } else {
+          for (int i=0; i<pieces.size(); i++) {
+            if (pieces.get(i).pos==xy_topos(this.x+1, this.y-1) && this.x!=8 && pieces.get(i).team=="black") {
+              possiblemoves.append(xy_topos(this.x+1, this.y-1));
+            }
+            if (pieces.get(i).pos==xy_topos(this.x-1, this.y-1) && this.x!=1 && pieces.get(i).team=="black") {
+              possiblemoves.append(xy_topos(this.x-1, this.y-1));
+            }
+
+            if (!blocked) {
+              possiblemoves.append(xy_topos(this.x, this.y-1));
+            }if (!openingblocked) {
+              possiblemoves.append(xy_topos(this.x, this.y-2));
+            }
+          }
+        }
+      } else {
+
+
+        if (this.y!=8) {
+          boolean blocked=false;
+          boolean openingblocked=false;
+
+          for (int i=0; i<pieces.size(); i++) {
+            if (pieces.get(i).pos==xy_topos(this.x, this.y+1)) {
+              blocked=true;
+            }
+            if (pieces.get(i).pos==xy_topos(this.x, this.y+2) || this.y!=2) {
+              openingblocked=true;
+            }
+          }
+          for (int i=0; i<pieces.size(); i++) {
+            if (pieces.get(i).pos==xy_topos(this.x+1, this.y+1) && this.x!=8 && pieces.get(i).team=="white") {
+              possiblemoves.append(xy_topos(this.x+1, this.y+1));
+            }
+            if (pieces.get(i).pos==xy_topos(this.x-1, this.y+1) && this.x!=1 && pieces.get(i).team=="white") {
+              possiblemoves.append(xy_topos(this.x-1, this.y+1));
+            }
+
+            if (!blocked) {
+              possiblemoves.append(xy_topos(this.x, this.y+1));
+            }if (!openingblocked) {
+              possiblemoves.append(xy_topos(this.x, this.y+2));
+            }
+          }
         }
       }
     }

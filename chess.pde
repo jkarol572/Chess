@@ -1,9 +1,12 @@
 PImage light, dark, pawnbPic, pawnwPic, queenbPic, queenwPic, rookbPic, rookwPic, knightbPic, knightwPic, kingbPic, kingwPic, bishopbPic, bishopwPic;
 ArrayList<Piece> pieces;
+
 int pos;
 int active;
 int whichblock;
 boolean locked;
+boolean whiteturn;
+int count=0;
 
 
 int pos_tox(int pos) {
@@ -41,7 +44,7 @@ int mouse_toid() {
 void setup() {
   size(1300, 720);
   pieces = new ArrayList<Piece>();
-  pos=1;
+  whiteturn=true;
 
   //Floor images
   light=loadImage("light.jpg");
@@ -109,6 +112,9 @@ void draw() {
     }
   }
 
+
+
+
   //Draw Pieces
   for (int i = 0; i<32; i++) {
     pieces.get(i).draw();
@@ -129,7 +135,12 @@ void mousePressed() {
   locked=true;
   for (int i = 0; i<32; i++) {
     if (mouse_toid()==pieces.get(i).pos) {
-      whichblock=i;
+      if (whiteturn && pieces.get(i).team=="white") {
+        whichblock=i;
+      }  
+      if (!whiteturn && pieces.get(i).team=="black") {
+        whichblock=i;
+      }
     }
   }
   if (locked && whichblock!=999) {
@@ -139,17 +150,60 @@ void mousePressed() {
 
 void mouseReleased() {
   locked=false;
+  boolean dropped=false;
+  if (whichblock!=999) {
+    for (int i=0; i<pieces.get(whichblock).possiblemoves.size(); i++) {
+      if (mouse_toid()==pieces.get(whichblock).possiblemoves.get(i)) {
+        pieces.get(whichblock).pos=mouse_toid();
 
-if(whichblock!=999){
-  for (int i=0; i<pieces.get(whichblock).possiblemoves.size(); i++) {
-    println(pieces.get(whichblock).possiblemoves.size());
-    if (mouse_toid()==pieces.get(whichblock).possiblemoves.get(i)) {
-      pieces.get(whichblock).pos=mouse_toid();
+        dropped=true;
+      }
+    }
+  }
+  for (int i = 0; i<32; i++) {
+    pieces.get(i).active=false;
+    if(whichblock!=999){
+    if (pieces.get(i).pos==pieces.get(whichblock).pos && whichblock!=i) {
+      println("CLDE");
+      pieces.get(i).dead=true;
+    }
+  }
+  }
+  whichblock=999;
+
+  if (dropped) {
+    whiteturn=!whiteturn;
+  }
+}
+void finddeath() {
+  for (int i=0; i<32; i++) {
+    for (int j=0; j<32; j++) {
+      if (pieces.get(i).pos==pieces.get(j).pos && !pieces.get(i).team.equals(pieces.get(j).team)) {
+        if (whiteturn) {
+          if (pieces.get(i).team=="black") {
+            pieces.get(i).dead=true;
+          }
+          if (pieces.get(j).team=="black") {
+            pieces.get(j).dead=true;
+          }
+        }
+      }
     }
   }
 }
-  for (int i = 0; i<32; i++) {
-    pieces.get(i).active=false;
+void findddeath() {
+  for (int i=0; i<32; i++) {
+    for (int j=0; j<32; j++) {
+      if (pieces.get(i).pos==pieces.get(j).pos && !pieces.get(i).team.equals(pieces.get(j).team)) {
+        if (!whiteturn) {
+          if (pieces.get(i).team=="white") {
+            pieces.get(i).dead=true;
+          }
+          if (pieces.get(j).team=="white") {
+            pieces.get(j).dead=true;
+          }
+        }
+      }
+    }
   }
-  whichblock=999;
 }
