@@ -4,6 +4,7 @@ class Piece {
   int id;
   int pos;
   PImage pic;
+  boolean active=false;
 
   Piece(String teamm, String rankk, int idd, int poss, PImage picc) {
     team = teamm;
@@ -14,7 +15,11 @@ class Piece {
   }
   void draw() {
     imageMode(CENTER);
-    image(pic, (pos_tox(pos)*100)-50, (pos_toy(pos)*100)-50);
+    if (!active) {
+      image(pic, (pos_tox(pos)*90)-45, (pos_toy(pos)*90)-45);
+    } else {
+      image(pic, mouseX, mouseY);
+    }
     imageMode(CORNER);
   }
 }
