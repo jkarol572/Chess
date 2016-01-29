@@ -23,6 +23,13 @@ int pos_toy(int pos) {
   }
 }
 
+int xy_topos(int x, int y) {
+  int pos;
+
+  pos=x+(y-1)*8;
+  return pos;
+}
+
 int mouse_toid() {
   int xpos = round((mouseX/90)-.5)+1;
   int ypos = round((mouseY/90)-.5);
@@ -105,9 +112,9 @@ void draw() {
   //Draw Pieces
   for (int i = 0; i<32; i++) {
     pieces.get(i).draw();
+    pieces.get(i).findmoves();
   }
 
-  pieces.get(0).draw();
 
 
 
@@ -123,18 +130,26 @@ void mousePressed() {
   for (int i = 0; i<32; i++) {
     if (mouse_toid()==pieces.get(i).pos) {
       whichblock=i;
-      println(pieces.get(whichblock).team + " : " +pieces.get(whichblock).rank);
     }
   }
-   if (locked && whichblock!=999) {
+  if (locked && whichblock!=999) {
     pieces.get(whichblock).active=true;
   }
 }
 
 void mouseReleased() {
   locked=false;
-  whichblock=999;
-    for (int i = 0; i<32; i++) {
-      pieces.get(i).active=false;
+
+if(whichblock!=999){
+  for (int i=0; i<pieces.get(whichblock).possiblemoves.size(); i++) {
+    println(pieces.get(whichblock).possiblemoves.size());
+    if (mouse_toid()==pieces.get(whichblock).possiblemoves.get(i)) {
+      pieces.get(whichblock).pos=mouse_toid();
     }
+  }
+}
+  for (int i = 0; i<32; i++) {
+    pieces.get(i).active=false;
+  }
+  whichblock=999;
 }
