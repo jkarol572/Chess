@@ -3,7 +3,7 @@ ArrayList<Piece> pieces;
 
 int pos;
 int active;
-int whichblock;
+int whichblock=999;
 boolean locked;
 boolean whiteturn;
 int count=0;
@@ -111,6 +111,9 @@ void draw() {
       }
     }
   }
+  if (locked && whichblock!=999) {
+    colorblocks(whichblock);
+  }
 
 
 
@@ -162,12 +165,12 @@ void mouseReleased() {
   }
   for (int i = 0; i<32; i++) {
     pieces.get(i).active=false;
-    if(whichblock!=999){
-    if (pieces.get(i).pos==pieces.get(whichblock).pos && whichblock!=i) {
-      println("CLDE");
-      pieces.get(i).dead=true;
+    if (whichblock!=999) {
+      if (pieces.get(i).pos==pieces.get(whichblock).pos && whichblock!=i) {
+        println("CLDE");
+        pieces.get(i).dead=true;
+      }
     }
-  }
   }
   whichblock=999;
 
@@ -175,35 +178,15 @@ void mouseReleased() {
     whiteturn=!whiteturn;
   }
 }
-void finddeath() {
-  for (int i=0; i<32; i++) {
-    for (int j=0; j<32; j++) {
-      if (pieces.get(i).pos==pieces.get(j).pos && !pieces.get(i).team.equals(pieces.get(j).team)) {
-        if (whiteturn) {
-          if (pieces.get(i).team=="black") {
-            pieces.get(i).dead=true;
-          }
-          if (pieces.get(j).team=="black") {
-            pieces.get(j).dead=true;
-          }
-        }
-      }
-    }
+
+
+void colorblocks(int whichblock) {
+  fill(255, 0, 0, 100);
+  println("START");
+
+  for (int i=0; i<pieces.get(whichblock).possiblemoves.size(); i++) {
+    println(pieces.get(whichblock).possiblemoves.get(i));
+    rect(pos_tox((pieces.get(whichblock).possiblemoves.get(i)))*90-90, pos_toy((pieces.get(whichblock).possiblemoves.get(i)))*90-90, 90, 90);
   }
-}
-void findddeath() {
-  for (int i=0; i<32; i++) {
-    for (int j=0; j<32; j++) {
-      if (pieces.get(i).pos==pieces.get(j).pos && !pieces.get(i).team.equals(pieces.get(j).team)) {
-        if (!whiteturn) {
-          if (pieces.get(i).team=="white") {
-            pieces.get(i).dead=true;
-          }
-          if (pieces.get(j).team=="white") {
-            pieces.get(j).dead=true;
-          }
-        }
-      }
-    }
-  }
+  println("END");
 }

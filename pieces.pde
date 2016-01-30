@@ -6,6 +6,8 @@ class Piece {
   PImage pic;
   boolean active=false;
   IntList possiblemoves = new IntList();
+  IntList tempmoves = new IntList();
+
   int x;
   int y;
   boolean dead=false;
@@ -35,7 +37,9 @@ class Piece {
   }
 
   void findmoves() {
+    tempmoves.clear();
     possiblemoves.clear();
+
 
     if (this.rank=="pawn") {
       if (this.team=="white") {
@@ -52,16 +56,17 @@ class Piece {
           }
           for (int i=0; i<pieces.size(); i++) {
             if (pieces.get(i).pos==xy_topos(this.x+1, this.y-1) && this.x!=8 && pieces.get(i).team=="black") {
-              possiblemoves.append(xy_topos(this.x+1, this.y-1));
+              tempmoves.append(xy_topos(this.x+1, this.y-1));
             }
             if (pieces.get(i).pos==xy_topos(this.x-1, this.y-1) && this.x!=1 && pieces.get(i).team=="black") {
-              possiblemoves.append(xy_topos(this.x-1, this.y-1));
+              tempmoves.append(xy_topos(this.x-1, this.y-1));
             }
 
             if (!blocked) {
-              possiblemoves.append(xy_topos(this.x, this.y-1));
-            }if (!openingblocked) {
-              possiblemoves.append(xy_topos(this.x, this.y-2));
+              tempmoves.append(xy_topos(this.x, this.y-1));
+            }
+            if (!openingblocked) {
+              tempmoves.append(xy_topos(this.x, this.y-2));
             }
           }
         }
@@ -82,19 +87,36 @@ class Piece {
           }
           for (int i=0; i<pieces.size(); i++) {
             if (pieces.get(i).pos==xy_topos(this.x+1, this.y+1) && this.x!=8 && pieces.get(i).team=="white") {
-              possiblemoves.append(xy_topos(this.x+1, this.y+1));
+              tempmoves.append(xy_topos(this.x+1, this.y+1));
             }
             if (pieces.get(i).pos==xy_topos(this.x-1, this.y+1) && this.x!=1 && pieces.get(i).team=="white") {
-              possiblemoves.append(xy_topos(this.x-1, this.y+1));
+              tempmoves.append(xy_topos(this.x-1, this.y+1));
             }
 
             if (!blocked) {
-              possiblemoves.append(xy_topos(this.x, this.y+1));
-            }if (!openingblocked) {
-              possiblemoves.append(xy_topos(this.x, this.y+2));
+              tempmoves.append(xy_topos(this.x, this.y+1));
+            }
+            if (!openingblocked) {
+              tempmoves.append(xy_topos(this.x, this.y+2));
             }
           }
         }
+      }
+    }
+
+    //Refine the list
+    if (tempmoves.size()!=0) {
+      possiblemoves.append(tempmoves.get(0));
+    }
+    for (int i=0; i<tempmoves.size(); i++) {
+      boolean repeat=false;
+      for (int j=0; j<possiblemoves.size(); j++) {
+        if (tempmoves.get(i)==possiblemoves.get(j)) {
+          repeat=true;
+        }
+      }
+      if (!repeat) {
+        possiblemoves.append(tempmoves.get(i));
       }
     }
   }
