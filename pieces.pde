@@ -158,15 +158,15 @@ class Piece {
           if (!friendlyfire(this.team, this.x+1, this.y)) {
             tempmoves.append(xy_topos(this.x+1, this.y));
           }
-           if (!friendlyfire(this.team, this.x+1, this.y-1)) {
+          if (!friendlyfire(this.team, this.x+1, this.y-1)) {
             tempmoves.append(xy_topos(this.x+1, this.y-1));
           }
         }
         if (this.x>1) {
-           if (!friendlyfire(this.team, this.x-1, this.y)) {
+          if (!friendlyfire(this.team, this.x-1, this.y)) {
             tempmoves.append(xy_topos(this.x-1, this.y));
           }
-           if (!friendlyfire(this.team, this.x-1, this.y-1)) {
+          if (!friendlyfire(this.team, this.x-1, this.y-1)) {
             tempmoves.append(xy_topos(this.x-1, this.y-1));
           }
         }
@@ -174,7 +174,84 @@ class Piece {
           tempmoves.append(xy_topos(this.x, this.y-1));
         }
       }
-  
+
+
+      if (this.y<8) {
+        if (this.x<8) {
+          if (!friendlyfire(this.team, this.x+1, this.y+1)) {
+            tempmoves.append(xy_topos(this.x+1, this.y+1));
+          }
+        }
+        if (this.x>1) {
+          if (!friendlyfire(this.team, this.x-1, this.y+1)) {
+            tempmoves.append(xy_topos(this.x-1, this.y+1));
+          }
+        }
+        if (!friendlyfire(this.team, this.x, this.y+1)) {
+          tempmoves.append(xy_topos(this.x, this.y+1));
+        }
+      }
+    }
+    if (rank=="bishop") {
+      //up  right diagnol
+      boolean upright=false;
+      for (int i = this.x; i<8; i++) {
+        if (i>0 && i<9 && !friendlyfire(this.team, i+1, this.y+(i-this.x+1)) && !upright && teamc(i+1, this.y+(i-this.x+1))=="s") {
+          tempmoves.append(xy_topos(i+1, this.y+(i-this.x+1)));
+        } else if (i>0 && i<9 && this.team!=teamc(i+1, this.y+(i-this.x+1)) && !upright) {
+          if ((this.team=="white" && teamc(i+1, this.y+(i-this.x+1))=="black")||(this.team=="black" && teamc(i+1, this.y+(i-this.x+1))=="white")) {
+            tempmoves.append(xy_topos(i+1, this.y+(i-this.x+1)));
+          }
+          upright=true;
+        } else {
+          upright=true;
+        }
+      }
+      
+      //Down right
+      boolean downright=false;
+      for (int i = this.x; i<8; i++) {
+        if (i>0 && i<9 && !friendlyfire(this.team, i+1, this.y-(i-this.x+1)) && !downright && teamc(i+1, this.y-(i-this.x+1))=="s") {
+          tempmoves.append(xy_topos(i+1, this.y-(i-this.x+1)));
+        } else if (i>0 && i<9 && this.team!=teamc(i+1, this.y-(i-this.x+1)) && !downright) {
+          if ((this.team=="white" && teamc(i+1, this.y-(i-this.x+1))=="black")||(this.team=="black" && teamc(i+1, this.y-(i-this.x+1))=="white")) {
+            tempmoves.append(xy_topos(i+1, this.y-(i-this.x+1)));
+          }
+          downright=true;
+        } else {
+          downright=true;
+        }
+      }
+
+      //up  left diagnol
+      boolean upleft=false;
+      for (int i = this.x; i>1; i--) {
+        if (i>0 && i<9 && !friendlyfire(this.team, i-1, this.y+(this.x-i+1)) && !upleft && teamc(i-1, this.y+(this.x-i+1))=="s") {
+          tempmoves.append(xy_topos(i-1, this.y+(this.x-i+1)));
+        } else if (i>0 && i<9 && this.team!=teamc(i-1, this.y+(this.x-i+1)) && !upleft) {
+          if ((this.team=="white" && teamc(i-1, this.y+(this.x-i+1))=="black")||(this.team=="black" && teamc(i-1, this.y+(this.x-i+1))=="white")) {
+            tempmoves.append(xy_topos(i-1, this.y+(this.x-i+1)));
+          }
+          upleft=true;
+        } else {
+          upleft=true;
+        }
+      }
+      
+           //downleft
+      boolean downleft=false;
+      for (int i = this.x; i>1; i--) {
+        if (i>0 && i<9 && !friendlyfire(this.team, i-1, this.y-(this.x-i+1)) && !downleft && teamc(i-1, this.y-(this.x-i+1))=="s") {
+          tempmoves.append(xy_topos(i-1, this.y-(this.x-i+1)));
+        } else if (i>0 && i<9 && this.team!=teamc(i-1, this.y-(this.x-i+1)) && !downleft) {
+          if ((this.team=="white" && teamc(i-1, this.y-(this.x-i+1))=="black")||(this.team=="black" && teamc(i-1, this.y-(this.x-i+1))=="white")) {
+            tempmoves.append(xy_topos(i-1, this.y-(this.x-i+1)));
+          }
+          downleft=true;
+        } else {
+          downleft=true;
+        }
+      }
     }
 
     //Refine the list

@@ -195,9 +195,17 @@ boolean friendlyfire(String team, int x, int y) {
       temp = true;
     }
   }
-  if (temp) {
-    return true;
-  } else {
-    return false;
+  return temp;
+}
+String teamc(int x, int y) {
+  String colorr = "s";
+
+  for (int i = 0; i<pieces.size(); i++) {
+    if (pieces.get(i).x==x && pieces.get(i).y==y && pieces.get(i).team=="white") {
+      colorr = "white";
+    } else if (pieces.get(i).x==x && pieces.get(i).y==y && pieces.get(i).team=="black") {
+      colorr="black";
+    }
   }
+  return colorr;
 }
