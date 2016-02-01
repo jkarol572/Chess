@@ -71,8 +71,6 @@ class Piece {
           }
         }
       } else {
-
-
         if (this.y!=8) {
           boolean blocked=false;
           boolean openingblocked=false;
@@ -103,9 +101,80 @@ class Piece {
         }
       }
     }
-    if(this.rank=="knight"){
-      if(this.y<7){}
-    
+    if (this.rank=="knight") {
+      if (this.y<7) {
+        if (this.x>1) {
+          if (!friendlyfire(this.team, this.x-1, this.y+2)) {
+            tempmoves.append(xy_topos(this.x-1, this.y+2));
+          }
+        }
+        if (this.x<8) {
+          if (!friendlyfire(this.team, this.x+1, this.y+2)) {
+            tempmoves.append(xy_topos(this.x+1, this.y+2));
+          }
+        }
+      }
+      if (this.y>2) {
+        if (this.x>1) {
+          if (!friendlyfire(this.team, this.x-1, this.y-2)) {
+            tempmoves.append(xy_topos(this.x-1, this.y-2));
+          }
+        }
+        if (this.x<8) {
+          if (!friendlyfire(this.team, this.x+1, this.y-2)) {
+            tempmoves.append(xy_topos(this.x+1, this.y-2));
+          }
+        }
+      }
+
+      if (this.x<7) {
+        if (this.y>1) {
+          if (!friendlyfire(this.team, this.x+2, this.y-1)) {
+            tempmoves.append(xy_topos(this.x+2, this.y-1));
+          }
+        }
+        if (this.y<8) {
+          if (!friendlyfire(this.team, this.x+2, this.y+1)) {
+            tempmoves.append(xy_topos(this.x+2, this.y+1));
+          }
+        }
+      }
+      if (this.x>2) {
+        if (this.y>1) {
+          if (!friendlyfire(this.team, this.x-2, this.y-1)) {
+            tempmoves.append(xy_topos(this.x-2, this.y-1));
+          }
+        }
+        if (this.y<8) {
+          if (!friendlyfire(this.team, this.x-2, this.y+1)) {
+            tempmoves.append(xy_topos(this.x-2, this.y+1));
+          }
+        }
+      }
+    }
+    if (this.rank=="king") {
+      if (this.y>1) {
+        if (this.x<8) {
+          if (!friendlyfire(this.team, this.x+1, this.y)) {
+            tempmoves.append(xy_topos(this.x+1, this.y));
+          }
+           if (!friendlyfire(this.team, this.x+1, this.y-1)) {
+            tempmoves.append(xy_topos(this.x+1, this.y-1));
+          }
+        }
+        if (this.x>1) {
+           if (!friendlyfire(this.team, this.x-1, this.y)) {
+            tempmoves.append(xy_topos(this.x-1, this.y));
+          }
+           if (!friendlyfire(this.team, this.x-1, this.y-1)) {
+            tempmoves.append(xy_topos(this.x-1, this.y-1));
+          }
+        }
+        if (!friendlyfire(this.team, this.x, this.y-1)) {
+          tempmoves.append(xy_topos(this.x, this.y-1));
+        }
+      }
+  
     }
 
     //Refine the list

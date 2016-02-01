@@ -167,7 +167,6 @@ void mouseReleased() {
     pieces.get(i).active=false;
     if (whichblock!=999) {
       if (pieces.get(i).pos==pieces.get(whichblock).pos && whichblock!=i) {
-        println("CLDE");
         pieces.get(i).dead=true;
       }
     }
@@ -182,11 +181,23 @@ void mouseReleased() {
 
 void colorblocks(int whichblock) {
   fill(255, 0, 0, 100);
-  println("START");
 
   for (int i=0; i<pieces.get(whichblock).possiblemoves.size(); i++) {
-    println(pieces.get(whichblock).possiblemoves.get(i));
     rect(pos_tox((pieces.get(whichblock).possiblemoves.get(i)))*90-90, pos_toy((pieces.get(whichblock).possiblemoves.get(i)))*90-90, 90, 90);
   }
-  println("END");
+}
+
+boolean friendlyfire(String team, int x, int y) {
+  boolean temp = false;
+
+  for (int i = 0; i<pieces.size(); i++) {
+    if (pieces.get(i).x==x && pieces.get(i).y==y && pieces.get(i).team==team) {
+      temp = true;
+    }
+  }
+  if (temp) {
+    return true;
+  } else {
+    return false;
+  }
 }
