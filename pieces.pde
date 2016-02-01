@@ -103,6 +103,10 @@ class Piece {
         }
       }
     }
+    if(this.rank=="knight"){
+      if(this.y<7){}
+    
+    }
 
     //Refine the list
     if (tempmoves.size()!=0) {
