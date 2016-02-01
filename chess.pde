@@ -131,6 +131,12 @@ void draw() {
   //Draw Graveyard
   fill(220, 242, 250);
   rect(720, 0, 1300, 720);
+  
+  
+  
+  
+  
+  
 }
 void keyPressed() {
 }

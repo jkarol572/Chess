@@ -192,7 +192,7 @@ class Piece {
         }
       }
     }
-    if (rank=="bishop") {
+    if (this.rank=="bishop") {
       //up  right diagnol
       boolean upright=false;
       for (int i = this.x; i<8; i++) {
@@ -253,6 +253,8 @@ class Piece {
         }
       }
     }
+    
+   
 
     //Refine the list
     if (tempmoves.size()!=0) {
