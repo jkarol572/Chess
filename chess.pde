@@ -154,6 +154,8 @@ void mousePressed() {
 void mouseReleased() {
   locked=false;
   boolean dropped=false;
+  println(state(pieces, "white"));
+
   if (whichblock!=999) {
     for (int i=0; i<pieces.get(whichblock).possiblemoves.size(); i++) {
       if (mouse_toid()==pieces.get(whichblock).possiblemoves.get(i)) {
@@ -208,4 +210,89 @@ String teamc(int x, int y) {
     }
   }
   return colorr;
+}
+//boolean incheck(ArrayList<Piece> pieces, String team) {
+//  boolean is=false;
+
+//  if (team=="white") {
+//    int windex=0;
+//    for (int i = 0; i<pieces.size(); i++) {
+//      if (pieces.get(i).rank=="king" && pieces.get(i).team=="white") {
+//        windex=i;
+//      }
+//    }
+//    for (int j=0; j<pieces.size(); j++) {
+//      for (int k=0; k<pieces.get(j).possiblemoves.size(); k++) {
+//        if (j!=windex && pieces.get(j).possiblemoves.get(k)==pieces.get(windex).pos) {
+//          is=true;
+//        }
+//      }
+//    }
+//  } else if (team=="black") {
+//    int bindex=0;
+//    for (int i = 0; i<pieces.size(); i++) {
+//      if (pieces.get(i).rank=="king" && pieces.get(i).team=="black") {
+//        bindex=i;
+//      }
+//    }
+//    for (int j=0; j<pieces.size(); j++) {
+//      for (int k=0; k<pieces.get(j).possiblemoves.size(); k++) {
+//        if (j!=bindex && pieces.get(j).possiblemoves.get(k)==pieces.get(bindex).pos) {
+//          is=true;
+//        }
+//      }
+//    }
+//  }
+
+//  return is;
+//}
+String state(ArrayList<Piece> pieces, String team) {
+  String state="none";
+
+  if (team=="white") {
+    int windex=0;
+    for (int i = 0; i<pieces.size(); i++) {
+      if (pieces.get(i).rank=="king" && pieces.get(i).team=="white") {
+        windex=i;
+      }
+    }
+    for (int j=0; j<pieces.size(); j++) {
+      for (int k=0; k<pieces.get(j).possiblemoves.size(); k++) {
+        if (j!=windex && pieces.get(j).possiblemoves.get(k)==pieces.get(windex).pos) {
+          state="check";
+        }
+      }
+    }
+
+    int cantgo=0;//DOESNT ACCOUNT FOR IF KING STAYS STILL
+    for (int i=0; i<pieces.get(windex).possiblemoves.size(); i++) {
+      for (int j=0; j<pieces.size(); j++) {
+        for (int k=0; k<pieces.get(j).possiblemoves.size(); k++) {
+          if (windex!=j && pieces.get(j).possiblemoves.get(k)==pieces.get(windex).possiblemoves.get(i)) {
+            cantgo++;
+          }
+        }
+      }
+    }
+    if (cantgo==pieces.get(windex).possiblemoves.size() && cantgo!=0) {
+      state="check mate";
+    }
+    
+  } else if (team=="black") {
+    int bindex=0;
+    for (int i = 0; i<pieces.size(); i++) {
+      if (pieces.get(i).rank=="king" && pieces.get(i).team=="black") {
+        bindex=i;
+      }
+    }
+    for (int j=0; j<pieces.size(); j++) {
+      for (int k=0; k<pieces.get(j).possiblemoves.size(); k++) {
+        if (j!=bindex && pieces.get(j).possiblemoves.get(k)==pieces.get(bindex).pos) {
+          state="check";
+        }
+      }
+    }
+  }
+
+  return state;
 }

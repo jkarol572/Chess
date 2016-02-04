@@ -33,6 +33,8 @@ class Piece {
       imageMode(CORNER);
     } else {
       this.pos=999;
+      this.x=999;
+      this.y=999;
     }
   }
 
@@ -50,7 +52,7 @@ class Piece {
             if (pieces.get(i).pos==xy_topos(this.x, this.y-1)) {
               blocked=true;
             }
-            if (pieces.get(i).pos==xy_topos(this.x, this.y-2) || this.y!=7) {
+            if (pieces.get(i).pos==xy_topos(this.x, this.y-2) || this.y!=7 ||pieces.get(i).pos==xy_topos(this.x, this.y-1)) {
               openingblocked=true;
             }
           }
@@ -79,7 +81,7 @@ class Piece {
             if (pieces.get(i).pos==xy_topos(this.x, this.y+1)) {
               blocked=true;
             }
-            if (pieces.get(i).pos==xy_topos(this.x, this.y+2) || this.y!=2) {
+            if (pieces.get(i).pos==xy_topos(this.x, this.y+2) || this.y!=2 ||pieces.get(i).pos==xy_topos(this.x, this.y+1)) {
               openingblocked=true;
             }
           }
@@ -192,7 +194,7 @@ class Piece {
         }
       }
     }
-    if (rank=="bishop") {
+    if (rank=="bishop" || rank=="queen") {
       //up  right diagnol
       boolean upright=false;
       for (int i = this.x; i<8; i++) {
@@ -207,7 +209,7 @@ class Piece {
           upright=true;
         }
       }
-      
+
       //Down right
       boolean downright=false;
       for (int i = this.x; i<8; i++) {
@@ -237,8 +239,8 @@ class Piece {
           upleft=true;
         }
       }
-      
-           //downleft
+
+      //downleft
       boolean downleft=false;
       for (int i = this.x; i>1; i--) {
         if (i>0 && i<9 && !friendlyfire(this.team, i-1, this.y-(this.x-i+1)) && !downleft && teamc(i-1, this.y-(this.x-i+1))=="s") {
@@ -253,6 +255,66 @@ class Piece {
         }
       }
     }
+    if (rank=="rook" || rank=="queen") {
+      
+      boolean down=false;
+      for (int i = this.y; i>1; i--) {
+        if (i>0 && i<9 && !friendlyfire(this.team, this.x, i-1) && !down && teamc(this.x, i-1)=="s") {
+          tempmoves.append(xy_topos(this.x, i-1));
+        } else if (i>0 && i<9 && this.team!=teamc(this.x, i-1) && !down) {
+          if ((this.team=="white" && teamc(this.x, i-1)=="black")||(this.team=="black" && teamc(this.x, i-1)=="white")) {
+            tempmoves.append(xy_topos(this.x,i-1));
+          }
+          down=true;
+        } else {
+          down=true;
+        }
+      }
+      
+       boolean up=false;
+      for (int i = this.y; i<8; i++) {
+        if (i>0 && i<9 && !friendlyfire(this.team, this.x, i+1) && !up && teamc(this.x, i+1)=="s") {
+          tempmoves.append(xy_topos(this.x, i+1));
+        } else if (i>0 && i<9 && this.team!=teamc(this.x, i+1) && !up) {
+          if ((this.team=="white" && teamc(this.x, i+1)=="black")||(this.team=="black" && teamc(this.x, i+1)=="white")) {
+            tempmoves.append(xy_topos(this.x,i+1));
+          }
+          up=true;
+        } else {
+          up=true;
+        }
+      }
+      
+       boolean right=false;
+      for (int i = this.x; i<8; i++) {
+        if (i>0 && i<9 && !friendlyfire(this.team, i+1, this.y) && !right && teamc(i+1, this.y)=="s") {
+          tempmoves.append(xy_topos(i+1, this.y));
+        } else if (i>0 && i<9 && this.team!=teamc(i+1, this.y) && !right) {
+          if ((this.team=="white" && teamc(i+1, this.y)=="black")||(this.team=="black" && teamc(i+1, this.y)=="white")) {
+            tempmoves.append(xy_topos(i+1, this.y));
+          }
+          right=true;
+        } else {
+          right=true;
+        }
+      }
+      
+        boolean left=false;
+      for (int i = this.x; i>1; i--) {
+        if (i>0 && i<9 && !friendlyfire(this.team, i-1, this.y) && !left && teamc(i-1, this.y)=="s") {
+          tempmoves.append(xy_topos(i-1, this.y));
+        } else if (i>0 && i<9 && this.team!=teamc(i-1, this.y) && !left) {
+          if ((this.team=="white" && teamc(i-1, this.y)=="black")||(this.team=="black" && teamc(i-1, this.y)=="white")) {
+            tempmoves.append(xy_topos(i-1, this.y));
+          }
+          left=true;
+        } else {
+          left=true;
+        }
+      }
+    }
+
+
 
     //Refine the list
     if (tempmoves.size()!=0) {
